@@ -12,6 +12,7 @@
   	* <code>th { font-weight: bold; }</code>: makes the text of all <code>&lt;th&gt;</code> tags bold.
   	* <code>td, th { display: table-cell; vertical-align: inherit; }</code>: formats the text in <code>&lt;td&gt;</code> and <code>&lt;th&gt;</code> tags to display them as columns and rows of the table.
   	<code>.main-content table { border-collapse: collapse; }</code>: collapses table borders into a single border.
+  	<code>table { font-size: inherit; }</code> sets the font-size of text from the table to be the same as the table's parent.
 
   	**HTML Attributes**
   	* <code>th[Attributes Style] { text-align: -webkit-center; }</code>: centers the text in every <code>&lt;th&gt;</code> tag.

@@ -10,6 +10,6 @@
   	* <code>body { line-height: 1.22em; }</code> changes the height of body lines, making text look shorter.
   	* <code>* { margin: 0; }</code> overrides previous margin attributes and gives 0 margin to every element in the HTML file.
 
-  	**CSS Attributes**
-  	* <code>th[Attributes Style] { text-align: -webkit-center; }</code>
+  	**HTML Attributes**
+  	* <code>th[Attributes Style] { text-align: -webkit-center; }</code> centers the text in every <code>&lt;th&gt;</code> tag.
   	* <code></code>

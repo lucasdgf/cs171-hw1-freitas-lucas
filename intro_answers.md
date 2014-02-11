@@ -1,8 +1,5 @@
-Introductory Questions
-=======
-
-Lucas Freitas
------------
+1. Introductory Questions
+---
 
 Paragraphs are separated
 by a blank line.

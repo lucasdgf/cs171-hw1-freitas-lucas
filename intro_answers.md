@@ -1,4 +1,4 @@
-1. Introductory Questions
+0. Introductory Questions
 ---
 
 **Lucas Freitas** - *CS171: Homework 1*

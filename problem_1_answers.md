@@ -10,4 +10,4 @@
   	* <code>* { margin: 0; }</code>: overrides previous margin attributes and gives 0 margin to every element in the HTML file.
   	
   	**HTML Attributes**
-  	* <code>th[Attributes Style] { text-align: -webkit-center; }</code>: centers the text in every <code>&lt;th&gt;</code> tag.
+  	* <code>th align: center; }</code>: centers the text in every <code>&lt;th&gt;</code> tag. The CSS equivalent for the attribute would be <code>th { text-align: center; }</code>

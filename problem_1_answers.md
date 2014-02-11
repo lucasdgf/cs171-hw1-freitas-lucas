@@ -10,6 +10,7 @@
   	* <code>body { line-height: 1.22em; }</code>: changes the height of body lines, making text look shorter.
   	* <code>* { margin: 0; }</code>: overrides previous margin attributes and gives 0 margin to every element in the HTML file.
   	* <code>th { font-weight: bold; }</code>: makes the text of all <code>&lt;th&gt;</code> tags bold.
+  	* <code>td, th { display: table-cell; vertical-align: inherit; }</code>: formats the text in <code>&lt;td&gt;</code> and <code>&lt;th&gt;</code> tags to display them as columns and rows of the table.
 
   	**HTML Attributes**
   	* <code>th[Attributes Style] { text-align: -webkit-center; }</code>: centers the text in every <code>&lt;th&gt;</code> tag.

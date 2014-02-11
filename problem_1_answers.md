@@ -7,4 +7,5 @@
 
   2. **CSS Attributes**
   	* <code>main-content th {padding: 3px;}</code>: adds 3px of padding around each <code>&lt;th&gt;</code> element in the table, which makes the data look less cramped.
-  	* <code>body {line-height: 1.22em;}</code> changes the height of text lines, making text look shorter.
+  	* <code>body {line-height: 1.22em;}</code> changes the height of body lines, making text look shorter.
+  	* <code>* {margin: 0;}</code> overrides previous margin attributes and gives 0 margin to every element in the HTML file.

@@ -7,4 +7,4 @@
 
   2. **CSS Attributes**
   	* <code>padding: 3px;</code>: adds 3px of padding around each <code>&lt;th&gt;</code> element in the table, which makes the data look less cramped.
-  	* <code><line-height: 1.22em;></code> changes the height of text lines, making text look shorter.
+  	* <code>line-height: 1.22em;</code> changes the height of text lines, making text look shorter.

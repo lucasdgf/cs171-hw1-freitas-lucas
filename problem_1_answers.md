@@ -1,4 +1,4 @@
-1. Analyze an HTML Data <table>
+1. Analyze an HTML Data <code>&lt;table&gt;</code>
 ---
 
 **Lucas Freitas** - *CS171: Homework 1*

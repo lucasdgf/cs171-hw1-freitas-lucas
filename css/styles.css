@@ -1,0 +1,74 @@
+/* import nice-lookig font */
+
+@font-face { font-family: Brandon; src: url("../fonts/Brandon_reg.otf"); } 
+@font-face { font-family: Brandon-Light; src: url("../fonts/Brandon_light.otf"); } 
+@font-face { font-family: Brandon-Bold; src: url("../fonts/Brandon_bld.otf"); } 
+
+* {
+	font-family: "Brandon";
+	margin: 0;
+}
+
+h1 {
+	text-align: center;
+	font-family: "Brandon-Light";
+}
+
+th {
+	font-family: "Brandon-Bold";
+}
+
+table {
+	margin: 0 auto;
+	text-align: center;
+}
+
+table, th, td {
+	border: 1px solid black;
+}
+
+caption {
+	margin-bottom: 10px;
+}
+
+div.top_text h1 {
+	text-transform: uppercase;
+	text-align: center;
+	color: white;
+	margin: 0;
+	font-size: 30px;
+	padding: 30px 0;
+	background-color: #a60b0b;
+}
+
+div.top_text {
+	padding-top: 153px;
+	z-index: 11;
+	width: 100%;
+	position: relative;
+	background-position: center center !important;
+	background-repeat: no-repeat;
+}
+
+div.top {
+	margin: 0;
+	padding: 0;
+	background: url('../img/top.jpg');
+	background-position: center center !important;
+	background-repeat: no-repeat;
+	height: 314px;
+	width: 100% !important;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+
+div.body {
+	width: 100%;
+	padding: 40px 0;
+	background-color: white;
+	height: 100%;
+	z-index: 10;
+	position: relative;
+}

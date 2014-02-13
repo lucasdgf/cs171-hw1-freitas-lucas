@@ -4,33 +4,152 @@
   <meta charset="utf-8" />
   <title>CS171 Homework 1</title>
 
-  <style type="text/css">
-  /* YOUR CSS */
-  </style>
+  <link rel='stylesheet' media="screen" type='text/css' href='css/styles.css'/>
 </head>
 <body>
+
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script>
-  d3.tsv("unemp_states_us_nov_2013.tsv", function(error, data){
+  d3.text("unemp_states_us_nov_2013.tsv", function(text){
+      // data to be inserted in the table
+      var data = d3.tsv.parseRows(text);
 
-      var table = d3.select("body").append("table"),
+      // top div 
+      var top = d3.select("body").append("div");
+      top.classed({top: true});
+
+      // top text
+      var top_text = d3.select("body").append("div");
+      top_text.classed({top_text: true});
+
+      // table title
+      var title = top_text.append("h1")
+      .html('Unemployment Rates for States');
+
+      // body div
+      var body = d3.select("body").append("div");
+      body.classed({body: true});
+
+      // table structure
+      var table = body.append("table"),
+      thead = table.append("thead"),
       tbody = table.append("tbody");
 
-      var rows = tbody.selectAll("tr")
-      .data(data)
-      .enter()
-      .append("tr");
+      // table caption
+      var caption = table.append("caption")
+        .html("Unemployment Rates for States<br/>Monthly Rankings Seasonally Adjusted<br/>Dec. 2013");
 
-      var cells = rows.selectAll("td")
-      .data(function(row) {
-        return d3.range(Object.keys(row).length).map(function(column, i) {
-          return row[Object.keys(row)[i]];
-          });
+      // table header
+      var header = thead.append("tr")
+        .selectAll("th")
+        .data(data.shift())
+        .enter()
+        .append("th")
+        .text(function(d) { return d; });
+
+      // last row clicked
+      var clicked = [1, 0, 0];
+
+      // ascending and descending functions
+      var ascending = d3.ascending;
+      var descending = d3.descending;
+
+      // set default cursors
+      thead.selectAll("th").style('cursor', 's-resize');
+      thead.select("th").style('cursor', 'n-resize');
+
+      // sort rows on th click
+      thead.selectAll("th")
+        .on('click', function(d, i){
+          var sorting;
+          if(clicked[i]) {
+            sorting = descending;
+            clicked[i] = 0;
+            d3.select(this).style('cursor', 's-resize');
+          }
+
+          else {
+            sorting = ascending;
+            clicked[i] = 1;
+            d3.select(this).style('cursor', 'n-resize');
+          }
+
+          // sort by state
+          if(i == 1)
+            tbody.selectAll("tr").sort(function(a, b) {
+                return sorting(a[1], b[1]);
+            })
+
+          // sort by rate or rank
+          else if(i == i)
+            tbody.selectAll("tr").sort(function(a, b) {
+              return sorting(parseFloat(a[i]), parseFloat(b[i]))
+              || sorting(a[1], b[1]);
+            })
+
+          // fix zebra coloring
+          tbody.selectAll("tr").style('background-color', function(data, row) {
+            if(!(row % 2))
+              return "rgba(128,25,25,0.5)";})
+        });
+
+      // rows of the table
+      var rows = tbody.selectAll("tr")
+        .data(data)
+        .enter()
+        .append("tr")
+        // zebra effect
+        .style('background-color', function(data, row) {
+          if(!(row % 2))
+            return "rgba(128,25,25,0.5)";})
+        // highlight row on hover
+        .on('mouseover', function(d){
+          d3.select(this).style({'background-color':'rgba(252,252,78,0.8)'});
         })
-      .enter()
-      .append("td")
-      .text(function(d) { return d; });
-      });
+        .on('mouseout', function(data, row){
+          if(!(row % 2))
+            d3.select(this).style({'background-color':'rgba(128,25,25,0.5)'});
+          else
+            d3.select(this).style({'background-color':'white'});
+        });
+
+      // cell elements
+      var cells = rows.selectAll("td")
+        .data(function(row) {
+          return d3.range(Object.keys(row).length).map(function(column, i) {
+            return row[Object.keys(row)[i]];
+            });
+          })
+        .enter()
+        .append("td")
+        .text(function(d) { return d; })
+        // highlight column on hover
+        .on('mouseover', function(data, i){
+            table.selectAll('tr')
+            .selectAll('td')
+            .style('background-color', function(data, j){ return i == j ? 'rgba(252,252,78,0.8)' : null;});
+        })
+        .on('mouseout', function(d,i){
+            table.selectAll('tr').selectAll('td').style('background-color', null);
+        }); 
+
+      // sort by rank
+      tbody.selectAll("tr").sort(function(a, b) {
+        return ascending(parseFloat(a[2]), parseFloat(b[2])) || ascending(a[1], b[1]);
+      })  
+
+      var color = d3.scale.linear()
+  .domain([0, tbody.selectAll("tr")[0].length-1])
+  .interpolate(d3.interpolateRgb)
+  .range(["orangered", "silver"])
+
+  alert(color(0));
+  alert(color(10));
+  alert(color(150));
+  });
+
   </script>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript" src="js/scripts.js"></script>
 </body>
 </html>

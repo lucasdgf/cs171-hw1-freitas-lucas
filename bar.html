@@ -68,7 +68,7 @@
 
       // bar colors
       var color = d3.scale.linear()
-        .domain([0, max])
+        .domain([min, max])
         .interpolate(d3.interpolateRgb)
         .range(["orangered", "silver"])
 

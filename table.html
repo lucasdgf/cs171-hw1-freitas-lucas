@@ -197,7 +197,7 @@
             });
         });
 
-      // sort by rank
+      // sort by rate
       tbody.selectAll("tr").sort(function(a, b) {
         return ascending(parseFloat(a[2]), parseFloat(b[2])) || ascending(a[1], b[1]);
       })  

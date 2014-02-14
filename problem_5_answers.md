@@ -12,3 +12,5 @@
 	* Outtermost <code>g</code>: contains the entire graph, including its title.
 	* Middle <code>g</code>: only contains the entire graph.
 	* Innermost <code>g</code>: represents each bar individually.
+
+3. Adding <code>text</code> before or after the <code>rect</code> has no consequences on the graph, since SVG requires explicitly adding text nodes in order to add text to the SVG group.

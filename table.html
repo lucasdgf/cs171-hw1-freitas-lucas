@@ -39,16 +39,20 @@
       var caption = table.append("caption")
         .html("Unemployment Rates for States<br/>Monthly Rankings Seasonally Adjusted<br/>Dec. 2013");
 
+      // add bar header
+      var header_text = data.shift();
+      header_text.push("Bar");
+
       // table header
       var header = thead.append("tr")
         .selectAll("th")
-        .data(data.shift())
+        .data(header_text)
         .enter()
         .append("th")
         .text(function(d) { return d; });
 
       // last row clicked
-      var clicked = [1, 0, 0];
+      var clicked = [1, 0, 0, 0];
 
       // ascending and descending functions
       var ascending = d3.ascending;
@@ -61,6 +65,13 @@
       // sort rows on th click
       thead.selectAll("th")
         .on('click', function(d, i){
+          // reset header colors
+          thead.selectAll("th").style({'background-color': null, 'color': null});
+
+          // change header color
+          d3.select(this).style({'background-color': '#a60b0b', 'color': 'white'});
+
+          // fix cursor direction
           var sorting;
           if(clicked[i]) {
             sorting = descending;
@@ -78,10 +89,17 @@
           if(i == 1)
             tbody.selectAll("tr").sort(function(a, b) {
                 return sorting(a[1], b[1]);
+            });
+
+          // sort by bars
+          else if(i == 3)
+            tbody.selectAll("tr").sort(function(a, b) {
+              return sorting(parseFloat(a[2]), parseFloat(b[2]))
+              || sorting(a[1], b[1]);
             })
 
           // sort by rate or rank
-          else if(i == i)
+          else
             tbody.selectAll("tr").sort(function(a, b) {
               return sorting(parseFloat(a[i]), parseFloat(b[i]))
               || sorting(a[1], b[1]);
@@ -107,11 +125,29 @@
           d3.select(this).style({'background-color':'rgba(252,252,78,0.8)'});
         })
         .on('mouseout', function(data, row){
+          // reset color
           if(!(row % 2))
             d3.select(this).style({'background-color':'rgba(128,25,25,0.5)'});
           else
             d3.select(this).style({'background-color':'white'});
+
+          d3.select(this).selectAll("td").style('background-color', function (data, i) {
+            if(i == 2)
+              return color(parseFloat(data));
+            return null;
+          });
         });
+
+      // min and max rates
+      var range = d3.extent(data, function(d) {
+        return parseFloat(d[2]);
+      });
+
+      // color cells based on rate
+      var color = d3.scale.linear()
+        .domain(range)
+        .interpolate(d3.interpolateRgb)
+        .range(["orangered", "silver"]);
 
       // cell elements
       var cells = rows.selectAll("td")
@@ -123,29 +159,49 @@
         .enter()
         .append("td")
         .text(function(d) { return d; })
-        // highlight column on hover
-        .on('mouseover', function(data, i){
+        .style('background-color', function(data, i){
+          if(i == 2)
+            return color(parseFloat(data));
+          return null;
+        })
+      ;
+
+      // add bars
+      rows.insert("td").append("svg")
+       .attr("width", "80px")
+       .attr("height", "20px")
+       .attr("fill", function(d) { return color(parseFloat(d[2])); })
+       .append("rect")
+       .attr("height", "30px")
+       .attr("width", function(d) { return parseFloat(d[0]); });
+
+
+      // highlight column on hover
+      rows.selectAll("td").on('mouseover', function(data, i){
             table.selectAll('tr')
             .selectAll('td')
-            .style('background-color', function(data, j){ return i == j ? 'rgba(252,252,78,0.8)' : null;});
+            .style('background-color', function(data, j){ 
+              if(i == j)
+                return 'rgba(252,252,78,0.8)';
+              else if(j == 2)
+                return color(parseFloat(data));
+              return null;
+            });
         })
         .on('mouseout', function(d,i){
-            table.selectAll('tr').selectAll('td').style('background-color', null);
-        }); 
+            // reset color
+            table.selectAll('tr').selectAll('td').style('background-color', function (data, i) {
+              if(i == 2)
+                return color(parseFloat(data));
+              return null;
+            });
+        });
 
       // sort by rank
       tbody.selectAll("tr").sort(function(a, b) {
         return ascending(parseFloat(a[2]), parseFloat(b[2])) || ascending(a[1], b[1]);
       })  
 
-      var color = d3.scale.linear()
-  .domain([0, tbody.selectAll("tr")[0].length-1])
-  .interpolate(d3.interpolateRgb)
-  .range(["orangered", "silver"])
-
-  alert(color(0));
-  alert(color(10));
-  alert(color(150));
   });
 
   </script>

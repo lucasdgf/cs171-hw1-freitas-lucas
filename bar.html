@@ -4,18 +4,38 @@
 <script src="http://d3js.org/d3.v3.min.js"></script>
   <style type="text/css">
     rect {
-        fill: teal;
         fill-opacity: .8;
     }
     text {
         font: 10px sans-serif;
     }
+
+    h2 {
+      font: 24px sans-serif;
+      text-transform: uppercase;
+      margin: 50px 0 10px 290px;
+    }
+
+    div {
+      font: 16px sans-serif;
+      text-transform: uppercase;
+      margin: 0px 0 10px 450px;
+    }
   </style>
 </head>
 <body>
+  <div>
+    <label>
+      <input type="radio" name="order" value="state">State
+    </label>
+
+    <label>
+      <input type="radio" name="order" value="rate" checked> Rate
+    </label>
+  </div>
   <script type="text/javascript">
 
-    var margin = {top: 50, bottom: 10, left:300, right: 40};
+    var margin = {top: 10, bottom: 10, left:300, right: 40};
     var width = 900 - margin.left - margin.right;
     var height = 900 - margin.top - margin.bottom;
 
@@ -33,6 +53,11 @@
     var g = svg.append("g")
       .attr("transform", "translate("+margin.left+","+margin.top+")");
 
+    // graph title
+    var title = d3.select("body").insert("html", ":first-child")
+      .style('font-size', '20px')
+      .html("<h2>Unemployment Rates for States</h2>");
+
     d3.tsv("unemp_states_us_nov_2013.tsv", function(data) {
 
       var max = d3.max(data, function(d) { return d.Rate; } );
@@ -41,17 +66,97 @@
       xScale.domain([min, max]);
       yScale.domain(data.map(state));
 
+      // bar colors
+      var color = d3.scale.linear()
+        .domain([0, max])
+        .interpolate(d3.interpolateRgb)
+        .range(["orangered", "silver"])
+
       var groups = g.append("g")
         .selectAll("g")
         .data(data)
-      .enter()
+        .enter()
         .append("g")
         .attr("transform", function(d, i) { return "translate(0, " + yScale(d.State) +")"; });
 
       var bars = groups
         .append("rect")
         .attr("width", function(d) { return xScale(d.Rate); })
-        .attr("height", bar_height);
+        .attr("height", bar_height)
+        .attr("fill", function(d) {
+          return color(d.Rate);
+        });
+
+      groups.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", function(d) { return -10; })
+        .attr("y", function(d) { return bar_height/2 + 3; })
+        .attr("fill", "teal")
+        .text(function(d) { return d.State; })
+
+      groups.append("text")
+        .attr("x", function(d) { return xScale(d.Rate) - 20; })
+        .attr("y", function(d) { return bar_height/2 + 3; })
+        .attr("fill", "white")
+        .text(function(d) { return d.Rate; })
+
+      // remember the last clicked button
+      var last_clicked = null;
+
+      // remember last operation in case of double click
+      var sorting = d3.ascending;
+      
+      // reorder function
+      var reorder = function(item) {
+        // define what we're ordering by
+        var i;
+
+        if(item.attr("value") == "state")
+          i = 0;
+        else
+          i = 1;
+
+        // alternate between ascending and descending sorting
+        if(last_clicked == i) {
+          sorting = (sorting == d3.ascending) ? d3.descending : d3.ascending;
+        }
+        
+        else
+          sorting = d3.ascending;
+
+        // record last clicked
+        last_clicked = i;
+
+        if(i == 0) {
+          data.sort(function(a, b) {
+            return sorting(a.State, b.State);
+          });
+        }
+        else {
+          data.sort(function(a, b) {
+            return sorting(parseFloat(a.Rate), parseFloat(b.Rate))
+              || sorting(a.State, b.State);
+          });
+        }
+
+        // update yScale
+        yScale.domain(data.map(function(d) {
+          return d.State;
+        }));
+
+        groups
+          .transition()
+          .duration(750)
+          .delay(function(d, i) { return i * 10; })
+          .attr("transform", function(d, i) {
+            return "translate(0, "+ yScale(d.State) +")";
+          }) 
+      };
+
+      // click events
+      d3.selectAll("input").on("click", function() {
+          reorder(d3.select(this));
+      });
 
     });
   </script>
